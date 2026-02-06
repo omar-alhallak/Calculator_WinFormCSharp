@@ -46,27 +46,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Core\Evaluation\CalcResult.cs" />
+    <Compile Include="Core\Evaluation\Solver.cs" />
+    <Compile Include="Core\Operations\BinaryOperation.cs" />
+    <Compile Include="Core\Operations\ThereAndLastOperator.cs" />
+    <Compile Include="Core\Operations\OperatorHelper.cs" />
+    <Compile Include="Core\Calculator.cs" />
+    <Compile Include="Core\Parsing\ExpressionTokenizer.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Calculator_des.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="UI\Calculator_des.Designer.cs">
+      <DependentUpon>Calculator_des.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Calculator_des.resx">
+      <DependentUpon>Calculator_des.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -80,20 +87,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pngtree-multiplication-icon-image_1338384.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-delete-key-24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-delete-100.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-delete-button-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8-divide-50.png" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
