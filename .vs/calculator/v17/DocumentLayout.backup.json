@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "C:\\calculator\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5A50105D-AD9B-43FA-B052-D38252CEB764}|calculator\\calculator.csproj|c:\\calculator\\calculator\\ui\\calculator_des.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5A50105D-AD9B-43FA-B052-D38252CEB764}|calculator\\calculator.csproj|solutionrelative:calculator\\ui\\calculator_des.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5A50105D-AD9B-43FA-B052-D38252CEB764}|calculator\\calculator.csproj|c:\\calculator\\calculator\\ui\\calculator_des.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{5A50105D-AD9B-43FA-B052-D38252CEB764}|calculator\\calculator.csproj|solutionrelative:calculator\\ui\\calculator_des.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
@@ -23,25 +19,11 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Calculator_des.cs",
-              "DocumentMoniker": "C:\\calculator\\calculator\\UI\\Calculator_des.cs",
-              "RelativeDocumentMoniker": "calculator\\UI\\Calculator_des.cs",
-              "ToolTip": "C:\\calculator\\calculator\\UI\\Calculator_des.cs*",
-              "RelativeToolTip": "calculator\\UI\\Calculator_des.cs*",
-              "ViewState": "AgIAAP4AAAAAAAAAAAAIwAABAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-10T13:54:49.524Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Calculator_des.cs [Design]",
               "DocumentMoniker": "C:\\calculator\\calculator\\UI\\Calculator_des.cs",
               "RelativeDocumentMoniker": "calculator\\UI\\Calculator_des.cs",
-              "ToolTip": "C:\\calculator\\calculator\\UI\\Calculator_des.cs [Design]*",
-              "RelativeToolTip": "calculator\\UI\\Calculator_des.cs [Design]*",
+              "ToolTip": "C:\\calculator\\calculator\\UI\\Calculator_des.cs [Design]",
+              "RelativeToolTip": "calculator\\UI\\Calculator_des.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-06T22:35:26.18Z",
               "EditorCaption": " [Design]"
