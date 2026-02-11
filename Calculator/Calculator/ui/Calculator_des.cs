@@ -1,4 +1,6 @@
 ﻿using calculator.Core;
+using Calculator.core;
+using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,90 +10,59 @@ namespace calculator
 {
     public partial class Calculator_des : Form
     {
-        private readonly InputNumber _Num = new InputNumber();
-        private Operator? _selectedOp = null;
+        private readonly CalculatorEngine Engine = new CalculatorEngine();
+        private KeyboardController Keyboardbtn;
 
         public Calculator_des()
         {
             InitializeComponent();
+            this.KeyPreview = true;
+            Keyboardbtn = new KeyboardController(Engine);
         }
 
         private void RefreshDisplay()
         {
-            txtResult.Text = _Num.Text;
+            lblStorage.Text = Engine.TopLine;
+            txtResult.Text = Engine.BottomLine;
+        }
+
+        private void HandleOperator(char symbol)
+        {
+            Engine.SelectOperator(symbol);
+            RefreshDisplay();
         }
 
         private void Digit_Click(object sender, EventArgs e)
         {
             if (sender is Button b && b.Tag != null)
             {
-                _Num.InputDigit(b.Tag.ToString()[0]);
+                Engine.InputDigit(b.Tag.ToString()[0]);
                 RefreshDisplay();
             }
         }
 
         private void btnDot_Click(object sender, EventArgs e)
         {
-            _Num.InputDecimal();
+            Engine.InputDot();
             RefreshDisplay();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            _Num.Backspace();
+            Engine.Backspace();
             RefreshDisplay();
         }
 
         private void btnAC_Click(object sender, EventArgs e)
         {
-            _Num.ClearEntry();
+            Engine.ClearAll();
             RefreshDisplay();
         }
 
         private void Calculator_des_KeyDown(object sender, KeyEventArgs e)
         {
-            // أرقام الصف العلوي
-            if (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+           if(Keyboardbtn.HandleKey(e))
             {
-                char digit = (char)('0' + (e.KeyCode - Keys.D0));
-                _Num.InputDigit(digit);
-                RefreshDisplay();
-                e.SuppressKeyPress = true;
-                return;
-            }
-
-            // أرقام النمباد
-            if (e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9)
-            {
-                char digit = (char)('0' + (e.KeyCode - Keys.NumPad0));
-                _Num.InputDigit(digit);
-                RefreshDisplay();
-                e.SuppressKeyPress = true;
-                return;
-            }
-
-            // Dot
-            if (e.KeyCode == Keys.Decimal || e.KeyCode == Keys.OemPeriod)
-            {
-                _Num.InputDecimal();
-                RefreshDisplay();
-                e.SuppressKeyPress = true;
-                return;
-            }
-
-            // Backspace
-            if (e.KeyCode == Keys.Back)
-            {
-                _Num.Backspace();
-                RefreshDisplay();
-                e.SuppressKeyPress = true;
-                return;
-            }
-
-            // Escape = Clear
-            if (e.KeyCode == Keys.Escape)
-            {
-                _Num.ClearEntry();
                 RefreshDisplay();
                 e.SuppressKeyPress = true;
             }
@@ -99,15 +70,20 @@ namespace calculator
 
         private void Op_Click(object sender, EventArgs e)
         {
-            if (sender is not Button b || b.Tag is null) return;
+            if (sender is Button b && b.Tag != null)
+            {
+                HandleOperator(b.Tag.ToString()[0]);
+            }
+        }
 
-            char symbol = b.Tag.ToString()[0];
-
-            if (!OperatorInfo.FromSymbol.TryGetValue(symbol, out var op))
+        private void btnEquals_Click(object sender, EventArgs e)
+        {
+            if (!Engine.Equals(out var error))
+            {
+                txtResult.Text = "Error";
                 return;
-
-            _selectedOp = op;
-            txtResult.Text += OperatorInfo.ByType[op].DisplaySymbol;
+            }
+            RefreshDisplay();
         }
     }
 }

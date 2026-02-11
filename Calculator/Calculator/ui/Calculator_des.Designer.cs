@@ -50,7 +50,7 @@
             Memory = new Panel();
             lblStorage = new Label();
             P2 = new Panel();
-            txtResult = new TextBox();
+            txtResult = new RichTextBox();
             Memory.SuspendLayout();
             P2.SuspendLayout();
             SuspendLayout();
@@ -215,6 +215,7 @@
             btnEquals.Tag = "=";
             btnEquals.Text = "=";
             btnEquals.UseVisualStyleBackColor = false;
+            btnEquals.Click += btnEquals_Click;
             // 
             // btnSub
             // 
@@ -327,6 +328,7 @@
             lblStorage.Name = "lblStorage";
             lblStorage.Size = new Size(311, 27);
             lblStorage.TabIndex = 24;
+            lblStorage.Text = "0";
             // 
             // P2
             // 
@@ -358,15 +360,17 @@
             // txtResult
             // 
             txtResult.BackColor = Color.FromArgb(32, 32, 32);
-            txtResult.Font = new Font("Gadugi", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtResult.Font = new Font("Gadugi", 18F);
             txtResult.ForeColor = SystemColors.Window;
-            txtResult.Location = new Point(28, 86);
-            txtResult.Multiline = true;
+            txtResult.Location = new Point(29, 86);
             txtResult.Name = "txtResult";
             txtResult.ReadOnly = true;
+            txtResult.ScrollBars = RichTextBoxScrollBars.None;
             txtResult.Size = new Size(318, 38);
-            txtResult.TabIndex = 23;
+            txtResult.TabIndex = 0;
+            txtResult.TabStop = false;
             txtResult.Text = "0";
+            txtResult.WordWrap = false;
             // 
             // Calculator_des
             // 
@@ -390,7 +394,6 @@
             Memory.ResumeLayout(false);
             P2.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
 
         }
 
@@ -417,7 +420,7 @@
         private System.Windows.Forms.Button btnPercent;
         private System.Windows.Forms.Panel Memory;
         private System.Windows.Forms.Panel P2;
-        private System.Windows.Forms.TextBox txtResult;
         private System.Windows.Forms.Label lblStorage;
+        private RichTextBox txtResult;
     }
 }
