@@ -45,12 +45,14 @@
             btnDevide = new Button();
             btnDot = new Button();
             btnAC = new Button();
-            btnDelete = new Button();
             btnPercent = new Button();
             Memory = new Panel();
             lblStorage = new Label();
             P2 = new Panel();
+            btnBackSpace = new Button();
+            btnCE = new Button();
             txtResult = new RichTextBox();
+            label1 = new Label();
             Memory.SuspendLayout();
             P2.SuspendLayout();
             SuspendLayout();
@@ -288,18 +290,6 @@
             btnAC.UseVisualStyleBackColor = false;
             btnAC.Click += btnAC_Click;
             // 
-            // btnDelete
-            // 
-            btnDelete.BackColor = Color.FromArgb(32, 32, 32);
-            btnDelete.FlatAppearance.BorderSize = 0;
-            btnDelete.Location = new Point(85, 3);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(155, 53);
-            btnDelete.TabIndex = 20;
-            btnDelete.Text = "Delete";
-            btnDelete.UseVisualStyleBackColor = false;
-            btnDelete.Click += btnDelete_Click;
-            // 
             // btnPercent
             // 
             btnPercent.FlatAppearance.BorderSize = 0;
@@ -328,13 +318,13 @@
             lblStorage.Name = "lblStorage";
             lblStorage.Size = new Size(311, 27);
             lblStorage.TabIndex = 24;
-            lblStorage.Text = "0";
             // 
             // P2
             // 
             P2.BackColor = Color.Black;
+            P2.Controls.Add(btnBackSpace);
+            P2.Controls.Add(btnCE);
             P2.Controls.Add(btnPercent);
-            P2.Controls.Add(btnDelete);
             P2.Controls.Add(btnMultiply);
             P2.Controls.Add(btn1);
             P2.Controls.Add(btn4);
@@ -357,6 +347,36 @@
             P2.Size = new Size(325, 298);
             P2.TabIndex = 0;
             // 
+            // btnBackSpace
+            // 
+            btnBackSpace.BackColor = Color.FromArgb(32, 32, 32);
+            btnBackSpace.FlatAppearance.BorderSize = 0;
+            btnBackSpace.Font = new Font("Gadugi", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnBackSpace.ForeColor = Color.Red;
+            btnBackSpace.Location = new Point(165, 3);
+            btnBackSpace.Name = "btnBackSpace";
+            btnBackSpace.Size = new Size(74, 53);
+            btnBackSpace.TabIndex = 23;
+            btnBackSpace.Text = "⌫";
+            btnBackSpace.TextAlign = ContentAlignment.TopCenter;
+            btnBackSpace.UseVisualStyleBackColor = false;
+            btnBackSpace.Click += btnBackSpace_Click;
+            // 
+            // btnCE
+            // 
+            btnCE.BackColor = Color.FromArgb(32, 32, 32);
+            btnCE.FlatAppearance.BorderColor = Color.White;
+            btnCE.FlatAppearance.BorderSize = 0;
+            btnCE.Font = new Font("Gadugi", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnCE.ForeColor = Color.White;
+            btnCE.Location = new Point(85, 3);
+            btnCE.Name = "btnCE";
+            btnCE.Size = new Size(75, 53);
+            btnCE.TabIndex = 22;
+            btnCE.Text = "CE";
+            btnCE.UseVisualStyleBackColor = false;
+            btnCE.Click += btnCE_Click;
+            // 
             // txtResult
             // 
             txtResult.BackColor = Color.FromArgb(32, 32, 32);
@@ -372,12 +392,24 @@
             txtResult.Text = "0";
             txtResult.WordWrap = false;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Gadugi", 18F);
+            label1.ForeColor = Color.Transparent;
+            label1.Location = new Point(1, 89);
+            label1.Name = "label1";
+            label1.Size = new Size(28, 28);
+            label1.TabIndex = 23;
+            label1.Text = "=";
+            // 
             // Calculator_des
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(32, 32, 32);
             ClientSize = new Size(373, 430);
+            Controls.Add(label1);
             Controls.Add(txtResult);
             Controls.Add(P2);
             Controls.Add(Memory);
@@ -394,6 +426,7 @@
             Memory.ResumeLayout(false);
             P2.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -416,11 +449,13 @@
         private System.Windows.Forms.Button btnDevide;
         private System.Windows.Forms.Button btnDot;
         private System.Windows.Forms.Button btnAC;
-        private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnPercent;
         private System.Windows.Forms.Panel Memory;
         private System.Windows.Forms.Panel P2;
         private System.Windows.Forms.Label lblStorage;
         private RichTextBox txtResult;
+        private Label label1;
+        private Button btnCE;
+        private Button btnBackSpace;
     }
 }
