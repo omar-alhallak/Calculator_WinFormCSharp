@@ -12,6 +12,7 @@ namespace Calculator.Calculator.Core.Domain
         private readonly InputBuffer Input = new();
         private readonly List<Token> Tokens = new();
         private bool AfterEquals = false;
+        private bool AfterPercent = false;
 
         public CalcError PreviewError { get; private set; } = CalcError.None;
         public string TopLine { get; private set; } = "";
@@ -25,6 +26,7 @@ namespace Calculator.Calculator.Core.Domain
             Tokens.Clear();
             Input.Restore("0", true);
             AfterEquals = false;
+            AfterPercent= false;
 
             PreviewError = CalcError.None;
             TopLine = "";
@@ -33,31 +35,62 @@ namespace Calculator.Calculator.Core.Domain
 
         public void ClearEntry()
         {
+            AfterPercent = false;
+
             if (!Input.IsFresh)
             {
                 Input.Restore("0", true);
-                PreviewError = CalcError.None;
                 UpdatePreview();
                 return;
             }
 
-            if (Tokens.Count > 0 && Tokens[^1].Type == TokenType.Number)
+            if (Tokens.Count == 0)
+            {
+                Input.Restore("0", true);
+                UpdatePreview();
+                return;
+            }
+
+            if (Tokens[^1].Type == TokenType.Operator)
+            {
+                return;
+            }
+
+            if (Tokens[^1].Type == TokenType.Percent)
+            {
+                while (Tokens.Count > 0 && Tokens[^1].Type == TokenType.Percent)
+                    Tokens.RemoveAt(Tokens.Count - 1);
+
+                if (Tokens.Count > 0 && Tokens[^1].Type == TokenType.Number)
+                    Tokens.RemoveAt(Tokens.Count - 1);
+
+                if (Tokens.Count == 0)
+                {
+                    Input.Restore("0", true);
+                    TopLine = "";
+                    BottomLine= "0";
+                    PreviewError= CalcError.None;
+                    return;
+                }
+                    
+                Input.BeginNew();
+                UpdatePreview();
+                return;
+            }
+
+            if (Tokens[^1].Type == TokenType.Number)
             {
                 Tokens.RemoveAt(Tokens.Count - 1);
-
                 Input.BeginNew();
-
-                PreviewError = CalcError.None;
                 UpdatePreview();
                 return;
             }
-
-            PreviewError = CalcError.None;
-            UpdatePreview();
         }
 
         public void InputDigit(char d) // عملية إدخال الأرقام
         {
+            if (AfterPercent) return;
+
             if (AfterEquals)
             {
                 Tokens.Clear();
@@ -71,6 +104,8 @@ namespace Calculator.Calculator.Core.Domain
 
         public void InputDot() // إدخال الفاصلة 
         {
+            if (AfterPercent) return;
+
             if (AfterEquals)
             {
                 Tokens.Clear();
@@ -98,8 +133,27 @@ namespace Calculator.Calculator.Core.Domain
                 return;
             }
 
+            AfterPercent = false;
+
             if (!OperatorInfo.FromSymbol.TryGetValue(symbol, out var op))
                 return;
+
+            if (Input.IsFresh &&
+                Tokens.Count > 0 &&
+                Tokens[^1].Type == TokenType.Percent)
+            {
+                if (Tokens.Count >= CalcLimits.MaxTokens - 1)
+                {
+                    PreviewError = CalcError.TooLong;
+                    UpdatePreview();
+                    return;
+                }
+
+                Tokens.Add(Token.Op(op));
+                Input.BeginNew();
+                UpdatePreview();
+                return;
+            }
 
             if (AfterEquals)
             {
@@ -141,8 +195,25 @@ namespace Calculator.Calculator.Core.Domain
             UpdatePreview();
         }
 
+        public void ApplyPercent() // زر %
+        {
+            if (PreviewError != CalcError.None)
+                return;
+
+            if(AfterEquals)
+            {
+                AfterEquals = false;
+                Tokens.Clear();
+                TopLine = "";
+            }
+            PercentFeature.AppendPercent(Tokens, Input);
+            UpdatePreview();
+             AfterPercent = true;
+        }
+
         public bool Equals(out CalcError error) // زر اليساوي
         {
+            AfterPercent = false;
             error = CalcError.None;
 
             if (AfterEquals)
@@ -186,14 +257,6 @@ namespace Calculator.Calculator.Core.Domain
 
         public void Backspace() // عملية الرجوع للخلف
         {
-            if (AfterEquals)
-            {
-                AfterEquals = false;
-                Tokens.Clear();
-                TopLine = "";
-                Input.Restore(Input.Text, false);
-            }
-
             if (!Input.IsFresh)
             {
                 Input.Backspace();
@@ -204,24 +267,31 @@ namespace Calculator.Calculator.Core.Domain
             if (Tokens.Count == 0)
             {
                 Input.Restore("0", true);
-                TopLine = "";
-                BottomLine = "0";
-                PreviewError = CalcError.None;
-                return;
-            }
-
-            var last = Tokens[^1];
-            Tokens.RemoveAt(Tokens.Count - 1);
-
-            if (last.Type == TokenType.Operator)
-            {
-                Input.BeginNew();
                 UpdatePreview();
                 return;
             }
 
-            Input.Restore(NumberFormatter.ToInputString(last.Number), false);
-            Input.Backspace();
+            Tokens.RemoveAt(Tokens.Count - 1);
+
+            if (Tokens.Count == 0)
+            {
+                Input.Restore("0", true);
+                UpdatePreview();
+                return;
+            }
+
+            var last = Tokens[^1];
+
+            if (last.Type == TokenType.Number)
+            {
+                Tokens.RemoveAt(Tokens.Count - 1);
+
+                Input.Restore(NumberFormatter.ToInputString(last.Number), false);
+            }
+            else
+                Input.Restore("0", true);
+
+            AfterPercent = Tokens.Count > 0 && Tokens[^1].Type== TokenType.Percent;
             UpdatePreview();
         }
 
@@ -273,7 +343,7 @@ namespace Calculator.Calculator.Core.Domain
             if (!Input.IsFresh && Input.TryGetValue(out var v))
                 eval.Add(Token.Num(v));
 
-            return eval;
+            return PercentFeature.ExpandForEvaluation(eval);
         }
 
         private static string BuildTopLine(IReadOnlyList<Token> tokens) // بناء السطر العلوي 
@@ -284,10 +354,19 @@ namespace Calculator.Calculator.Core.Domain
             foreach (var t in tokens)
             {
                 if (t.Type == TokenType.Number)
+                {
                     parts.Add(NumberFormatter.Format(t.Number));
-                else
+                }
+                else if (t.Type == TokenType.Operator)
+                {
                     parts.Add(OperatorInfo.ByType[t.Operator].DisplaySymbol);
+                }
+                else if (t.Type == TokenType.Percent)
+                {
+                    parts.Add("%");
+                }
             }
+
             return string.Join(" ", parts);
         }
 

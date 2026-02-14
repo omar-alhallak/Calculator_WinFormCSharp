@@ -44,7 +44,9 @@ namespace calculator
 
         private void RefreshDisplay()
         {
-            lblStorage.Text = Engine.TopLine;
+            txtStorage.Text = Engine.TopLine;
+            txtStorage.SelectionStart = txtStorage.TextLength;
+            txtStorage.ScrollToCaret();
 
             if (Engine.PreviewError != CalcError.None)
                 txtResult.Text = GetErrorMessage(Engine.PreviewError);
@@ -71,6 +73,11 @@ namespace calculator
 
             char op = b.Tag.ToString()![0];
             ExecuteHelper(() => Engine.SelectOperator(op));
+        }
+
+        private void btnPercent_Click(object sender, EventArgs e)
+        {
+            ExecuteHelper(() => Engine.ApplyPercent());
         }
 
         private void btnEquals_Click(object sender, EventArgs e)

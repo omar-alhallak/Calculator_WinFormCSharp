@@ -9,6 +9,7 @@ namespace Calculator.Calculator.Core.enums
     public enum TokenType
     {
         Number,
-        Operator
+        Operator,
+        Percent
     }
 }

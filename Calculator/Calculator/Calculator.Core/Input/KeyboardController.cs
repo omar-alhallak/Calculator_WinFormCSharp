@@ -176,6 +176,16 @@ namespace Calculator.Calculator.Core.Input
             }
 
             // ==========================
+            //         % Percent
+            // ==========================
+            if (e.KeyCode == Keys.D5 && e.Shift)
+            {
+                History.Push(Engine.Undo());
+                Engine.ApplyPercent();
+                return true;
+            }
+
+            // ==========================
             //    Operators - Top Row
             // ==========================
 
