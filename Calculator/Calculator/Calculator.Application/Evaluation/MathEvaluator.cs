@@ -1,12 +1,8 @@
-﻿using Calculator.Calculator.Core.Domain;
-using Calculator.Calculator.Core.enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Calculator.Calculator.Core.Model;
+using Calculator.Calculator.Domain.enums;
 
-namespace Calculator.Calculator.Core.Evaluation
+namespace Calculator.Calculator.Application.Evaluation
 {
     public static class MathEvaluator // مسؤل عن تنفيذ العمليات الحسابية
     {
@@ -33,11 +29,15 @@ namespace Calculator.Calculator.Core.Evaluation
                     continue;
                 }
 
-                while (ops.Count > 0 &&
-                       OperatorInfo.ByType[ops.Peek()].Precedence >= OperatorInfo.ByType[t.Operator].Precedence)
+                if(t.Type!=TokenType.Operator)
                 {
-                    if (!ApplyOperator(values, ops.Pop(), out result, out error))
-                        return false;
+                    error = CalcError.InvalidExpression;
+                    return false;
+                }
+
+                while (ops.Count > 0 && OperatorInfo.ByType[ops.Peek()].Precedence >= OperatorInfo.ByType[t.Operator].Precedence) 
+                {
+                    if (!ApplyOperator(values, ops.Pop(), out result, out error)) return false;
                 }
 
                 ops.Push(t.Operator);
@@ -45,8 +45,7 @@ namespace Calculator.Calculator.Core.Evaluation
 
             while (ops.Count > 0)
             {
-                if (!ApplyOperator(values, ops.Pop(), out result, out error))
-                    return false;
+                if (!ApplyOperator(values, ops.Pop(), out result, out error)) return false;
             }
 
             if (values.Count != 1)

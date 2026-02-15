@@ -46,25 +46,29 @@
             btnDot = new Button();
             btnAC = new Button();
             btnPercent = new Button();
-            Memory = new Panel();
+            PanelHistory = new Panel();
+            lblSecondLine = new Label();
+            lblTopLine = new Label();
             txtStorage = new RichTextBox();
             P2 = new Panel();
             btnBackSpace = new Button();
             btnCE = new Button();
             txtResult = new RichTextBox();
             label1 = new Label();
-            Memory.SuspendLayout();
+            lblNameHistory = new Label();
+            PanelHistory.SuspendLayout();
             P2.SuspendLayout();
             SuspendLayout();
             // 
             // btn1
             // 
             btn1.FlatAppearance.BorderSize = 0;
+            btn1.Font = new Font("Tahoma", 15.75F);
             btn1.ForeColor = Color.FromArgb(23, 32, 32);
             btn1.Location = new Point(3, 180);
             btn1.Name = "btn1";
             btn1.Size = new Size(75, 53);
-            btn1.TabIndex = 1;
+            btn1.TabIndex = 13;
             btn1.Tag = "1";
             btn1.Text = "1";
             btn1.UseVisualStyleBackColor = true;
@@ -73,11 +77,12 @@
             // btn8
             // 
             btn8.FlatAppearance.BorderSize = 0;
+            btn8.Font = new Font("Tahoma", 15.75F);
             btn8.ForeColor = Color.FromArgb(23, 32, 32);
             btn8.Location = new Point(84, 62);
             btn8.Name = "btn8";
             btn8.Size = new Size(75, 53);
-            btn8.TabIndex = 8;
+            btn8.TabIndex = 6;
             btn8.Tag = "8";
             btn8.Text = "8";
             btn8.UseVisualStyleBackColor = true;
@@ -86,11 +91,12 @@
             // btn7
             // 
             btn7.FlatAppearance.BorderSize = 0;
+            btn7.Font = new Font("Tahoma", 15.75F);
             btn7.ForeColor = Color.FromArgb(23, 32, 32);
             btn7.Location = new Point(3, 62);
             btn7.Name = "btn7";
             btn7.Size = new Size(75, 53);
-            btn7.TabIndex = 7;
+            btn7.TabIndex = 5;
             btn7.Tag = "7";
             btn7.Text = "7";
             btn7.UseVisualStyleBackColor = true;
@@ -99,11 +105,12 @@
             // btn6
             // 
             btn6.FlatAppearance.BorderSize = 0;
+            btn6.Font = new Font("Tahoma", 15.75F);
             btn6.ForeColor = Color.FromArgb(23, 32, 32);
             btn6.Location = new Point(166, 121);
             btn6.Name = "btn6";
             btn6.Size = new Size(75, 53);
-            btn6.TabIndex = 6;
+            btn6.TabIndex = 11;
             btn6.Tag = "6";
             btn6.Text = "6";
             btn6.UseVisualStyleBackColor = true;
@@ -112,11 +119,12 @@
             // btn5
             // 
             btn5.FlatAppearance.BorderSize = 0;
+            btn5.Font = new Font("Tahoma", 15.75F);
             btn5.ForeColor = Color.FromArgb(23, 32, 32);
             btn5.Location = new Point(85, 121);
             btn5.Name = "btn5";
             btn5.Size = new Size(75, 53);
-            btn5.TabIndex = 5;
+            btn5.TabIndex = 10;
             btn5.Tag = "5";
             btn5.Text = "5";
             btn5.UseVisualStyleBackColor = true;
@@ -125,11 +133,12 @@
             // btn4
             // 
             btn4.FlatAppearance.BorderSize = 0;
+            btn4.Font = new Font("Tahoma", 15.75F);
             btn4.ForeColor = Color.FromArgb(23, 32, 32);
             btn4.Location = new Point(3, 121);
             btn4.Name = "btn4";
             btn4.Size = new Size(75, 53);
-            btn4.TabIndex = 4;
+            btn4.TabIndex = 9;
             btn4.Tag = "4";
             btn4.Text = "4";
             btn4.UseVisualStyleBackColor = true;
@@ -138,11 +147,12 @@
             // btn3
             // 
             btn3.FlatAppearance.BorderSize = 0;
+            btn3.Font = new Font("Tahoma", 15.75F);
             btn3.ForeColor = Color.FromArgb(23, 32, 32);
             btn3.Location = new Point(166, 180);
             btn3.Name = "btn3";
             btn3.Size = new Size(75, 53);
-            btn3.TabIndex = 3;
+            btn3.TabIndex = 15;
             btn3.Tag = "3";
             btn3.Text = "3";
             btn3.UseVisualStyleBackColor = true;
@@ -151,11 +161,12 @@
             // btn2
             // 
             btn2.FlatAppearance.BorderSize = 0;
+            btn2.Font = new Font("Tahoma", 15.75F);
             btn2.ForeColor = Color.FromArgb(23, 32, 32);
             btn2.Location = new Point(85, 180);
             btn2.Name = "btn2";
             btn2.Size = new Size(75, 53);
-            btn2.TabIndex = 2;
+            btn2.TabIndex = 14;
             btn2.Tag = "2";
             btn2.Text = "2";
             btn2.UseVisualStyleBackColor = true;
@@ -164,11 +175,12 @@
             // btn9
             // 
             btn9.FlatAppearance.BorderSize = 0;
+            btn9.Font = new Font("Tahoma", 15.75F);
             btn9.ForeColor = Color.FromArgb(23, 32, 32);
             btn9.Location = new Point(165, 62);
             btn9.Name = "btn9";
             btn9.Size = new Size(75, 53);
-            btn9.TabIndex = 9;
+            btn9.TabIndex = 7;
             btn9.Tag = "9";
             btn9.Text = "9";
             btn9.UseVisualStyleBackColor = true;
@@ -177,11 +189,12 @@
             // btn0
             // 
             btn0.FlatAppearance.BorderSize = 0;
+            btn0.Font = new Font("Tahoma", 15.75F);
             btn0.ForeColor = Color.FromArgb(23, 32, 32);
             btn0.Location = new Point(85, 239);
             btn0.Name = "btn0";
             btn0.Size = new Size(75, 53);
-            btn0.TabIndex = 0;
+            btn0.TabIndex = 18;
             btn0.Tag = "0";
             btn0.Text = "0";
             btn0.UseVisualStyleBackColor = true;
@@ -195,7 +208,7 @@
             btnPlus.Location = new Point(247, 239);
             btnPlus.Name = "btnPlus";
             btnPlus.Size = new Size(75, 53);
-            btnPlus.TabIndex = 11;
+            btnPlus.TabIndex = 20;
             btnPlus.Tag = "+";
             btnPlus.Text = "+";
             btnPlus.UseVisualStyleBackColor = true;
@@ -213,7 +226,7 @@
             btnEquals.Margin = new Padding(0);
             btnEquals.Name = "btnEquals";
             btnEquals.Size = new Size(75, 53);
-            btnEquals.TabIndex = 16;
+            btnEquals.TabIndex = 19;
             btnEquals.Tag = "=";
             btnEquals.Text = "=";
             btnEquals.UseVisualStyleBackColor = false;
@@ -227,7 +240,7 @@
             btnSub.Location = new Point(247, 180);
             btnSub.Name = "btnSub";
             btnSub.Size = new Size(75, 53);
-            btnSub.TabIndex = 12;
+            btnSub.TabIndex = 16;
             btnSub.Tag = "-";
             btnSub.Text = "-";
             btnSub.UseVisualStyleBackColor = true;
@@ -241,7 +254,7 @@
             btnMultiply.Location = new Point(246, 121);
             btnMultiply.Name = "btnMultiply";
             btnMultiply.Size = new Size(75, 53);
-            btnMultiply.TabIndex = 13;
+            btnMultiply.TabIndex = 12;
             btnMultiply.Tag = "*";
             btnMultiply.Text = "×";
             btnMultiply.UseVisualStyleBackColor = true;
@@ -255,7 +268,7 @@
             btnDevide.Location = new Point(246, 62);
             btnDevide.Name = "btnDevide";
             btnDevide.Size = new Size(75, 53);
-            btnDevide.TabIndex = 14;
+            btnDevide.TabIndex = 8;
             btnDevide.Tag = "/";
             btnDevide.Text = "÷";
             btnDevide.UseVisualStyleBackColor = true;
@@ -269,7 +282,7 @@
             btnDot.Location = new Point(3, 239);
             btnDot.Name = "btnDot";
             btnDot.Size = new Size(76, 53);
-            btnDot.TabIndex = 10;
+            btnDot.TabIndex = 17;
             btnDot.Tag = ".";
             btnDot.Text = ".";
             btnDot.UseVisualStyleBackColor = true;
@@ -285,7 +298,7 @@
             btnAC.Location = new Point(4, 3);
             btnAC.Name = "btnAC";
             btnAC.Size = new Size(75, 53);
-            btnAC.TabIndex = 17;
+            btnAC.TabIndex = 1;
             btnAC.Text = "AC";
             btnAC.UseVisualStyleBackColor = false;
             btnAC.Click += btnAC_Click;
@@ -298,20 +311,39 @@
             btnPercent.Location = new Point(246, 3);
             btnPercent.Name = "btnPercent";
             btnPercent.Size = new Size(75, 53);
-            btnPercent.TabIndex = 15;
+            btnPercent.TabIndex = 4;
             btnPercent.Tag = "%";
             btnPercent.Text = "%";
             btnPercent.UseVisualStyleBackColor = true;
             btnPercent.Click += btnPercent_Click;
             // 
-            // Memory
+            // PanelHistory
             // 
-            Memory.Controls.Add(txtStorage);
-            Memory.Location = new Point(29, 0);
-            Memory.Name = "Memory";
-            Memory.Size = new Size(317, 80);
-            Memory.TabIndex = 22;
-            Memory.TabStop = true;
+            PanelHistory.Controls.Add(lblSecondLine);
+            PanelHistory.Controls.Add(lblTopLine);
+            PanelHistory.Location = new Point(36, 33);
+            PanelHistory.Name = "PanelHistory";
+            PanelHistory.Size = new Size(309, 88);
+            PanelHistory.TabIndex = 999;
+            PanelHistory.Click += PanelHistory_Click;
+            PanelHistory.Paint += PanelHistory_Paint;
+            // 
+            // lblSecondLine
+            // 
+            lblSecondLine.Location = new Point(3, 5);
+            lblSecondLine.Name = "lblSecondLine";
+            lblSecondLine.Size = new Size(303, 38);
+            lblSecondLine.TabIndex = 999;
+            lblSecondLine.Click += lblSecondLine_Click;
+            // 
+            // lblTopLine
+            // 
+            lblTopLine.AccessibleDescription = "";
+            lblTopLine.Location = new Point(3, 43);
+            lblTopLine.Name = "lblTopLine";
+            lblTopLine.Size = new Size(303, 42);
+            lblTopLine.TabIndex = 999;
+            lblTopLine.Click += lblTopLine_Click;
             // 
             // txtStorage
             // 
@@ -319,13 +351,16 @@
             txtStorage.BorderStyle = BorderStyle.None;
             txtStorage.Font = new Font("Gadugi", 12F);
             txtStorage.ForeColor = SystemColors.Window;
-            txtStorage.Location = new Point(4, 50);
+            txtStorage.Location = new Point(35, 127);
+            txtStorage.MaximumSize = new Size(389, 547);
+            txtStorage.MinimumSize = new Size(310, 27);
             txtStorage.Multiline = false;
             txtStorage.Name = "txtStorage";
             txtStorage.ReadOnly = true;
             txtStorage.ScrollBars = RichTextBoxScrollBars.Horizontal;
             txtStorage.Size = new Size(310, 27);
-            txtStorage.TabIndex = 25;
+            txtStorage.TabIndex = 999;
+            txtStorage.TabStop = false;
             txtStorage.Text = "";
             txtStorage.WordWrap = false;
             // 
@@ -352,7 +387,7 @@
             P2.Controls.Add(btnEquals);
             P2.Controls.Add(btn9);
             P2.Controls.Add(btn6);
-            P2.Location = new Point(25, 130);
+            P2.Location = new Point(28, 204);
             P2.Name = "P2";
             P2.Size = new Size(325, 298);
             P2.TabIndex = 0;
@@ -366,7 +401,7 @@
             btnBackSpace.Location = new Point(165, 3);
             btnBackSpace.Name = "btnBackSpace";
             btnBackSpace.Size = new Size(74, 53);
-            btnBackSpace.TabIndex = 19;
+            btnBackSpace.TabIndex = 3;
             btnBackSpace.Text = "⌫";
             btnBackSpace.TextAlign = ContentAlignment.TopCenter;
             btnBackSpace.UseVisualStyleBackColor = false;
@@ -382,7 +417,7 @@
             btnCE.Location = new Point(85, 3);
             btnCE.Name = "btnCE";
             btnCE.Size = new Size(75, 53);
-            btnCE.TabIndex = 18;
+            btnCE.TabIndex = 2;
             btnCE.Text = "CE";
             btnCE.UseVisualStyleBackColor = false;
             btnCE.Click += btnCE_Click;
@@ -392,13 +427,14 @@
             txtResult.BackColor = Color.FromArgb(32, 32, 32);
             txtResult.Font = new Font("Gadugi", 18F);
             txtResult.ForeColor = SystemColors.Window;
-            txtResult.Location = new Point(29, 86);
+            txtResult.Location = new Point(31, 160);
             txtResult.Multiline = false;
             txtResult.Name = "txtResult";
             txtResult.ReadOnly = true;
             txtResult.ScrollBars = RichTextBoxScrollBars.None;
             txtResult.Size = new Size(318, 38);
-            txtResult.TabIndex = 0;
+            txtResult.TabIndex = 999;
+            txtResult.TabStop = false;
             txtResult.Text = "0";
             txtResult.WordWrap = false;
             // 
@@ -407,33 +443,47 @@
             label1.AutoSize = true;
             label1.Font = new Font("Gadugi", 18F);
             label1.ForeColor = Color.Transparent;
-            label1.Location = new Point(1, 89);
+            label1.Location = new Point(3, 163);
             label1.Name = "label1";
             label1.Size = new Size(28, 28);
             label1.TabIndex = 999;
             label1.Text = "=";
+            // 
+            // lblNameHistory
+            // 
+            lblNameHistory.AutoSize = true;
+            lblNameHistory.Font = new Font("Tahoma", 15.75F);
+            lblNameHistory.ForeColor = Color.FromArgb(255, 128, 0);
+            lblNameHistory.Location = new Point(139, 5);
+            lblNameHistory.Name = "lblNameHistory";
+            lblNameHistory.Size = new Size(76, 25);
+            lblNameHistory.TabIndex = 1000;
+            lblNameHistory.Text = "History";
+            lblNameHistory.TextAlign = ContentAlignment.TopCenter;
+            lblNameHistory.Click += lblNameHistory_Click;
             // 
             // Calculator_des
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(32, 32, 32);
-            ClientSize = new Size(373, 430);
+            ClientSize = new Size(373, 508);
+            Controls.Add(lblNameHistory);
             Controls.Add(label1);
             Controls.Add(txtResult);
+            Controls.Add(txtStorage);
             Controls.Add(P2);
-            Controls.Add(Memory);
+            Controls.Add(PanelHistory);
             Font = new Font("Gadugi", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ForeColor = Color.White;
             KeyPreview = true;
             Margin = new Padding(4);
-            MaximumSize = new Size(389, 469);
-            MinimumSize = new Size(389, 469);
+            MaximumSize = new Size(389, 547);
+            MinimumSize = new Size(389, 547);
             Name = "Calculator_des";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Calculator";
-            KeyDown += Calculator_des_KeyDown;
-            Memory.ResumeLayout(false);
+            PanelHistory.ResumeLayout(false);
             P2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -460,12 +510,15 @@
         private System.Windows.Forms.Button btnDot;
         private System.Windows.Forms.Button btnAC;
         private System.Windows.Forms.Button btnPercent;
-        private System.Windows.Forms.Panel Memory;
+        private System.Windows.Forms.Panel PanelHistory;
         private System.Windows.Forms.Panel P2;
         private RichTextBox txtResult;
         private Label label1;
         private Button btnCE;
         private Button btnBackSpace;
         private RichTextBox txtStorage;
+        private Label lblSecondLine;
+        private Label lblTopLine;
+        private Label lblNameHistory;
     }
 }

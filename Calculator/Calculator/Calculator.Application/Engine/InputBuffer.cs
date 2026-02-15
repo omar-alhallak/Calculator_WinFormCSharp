@@ -1,12 +1,7 @@
-﻿using Calculator.Calculator.Core.Domain;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Calculator.Calculator.Core.Input
+namespace Calculator.Calculator.Application.Engine
 {
     public class InputBuffer // مسؤل عن إدخال الرقم الآتي
     {
@@ -17,8 +12,7 @@ namespace Calculator.Calculator.Core.Input
         {
             int d = 0;
             foreach (char c in Text)
-                if (char.IsDigit(c)) d++;
-            return d;
+                if (char.IsDigit(c)) d++;  return d;
         }
 
         public void BeginNew() => IsFresh = true; // ليأكد أن رقم تالي هو رقم
@@ -53,6 +47,12 @@ namespace Calculator.Calculator.Core.Input
             {
                 Text = digit.ToString();
                 IsFresh = false;
+                return;
+            }
+
+            if (Text == "-0") 
+            {
+                Text = "-" + digit;
                 return;
             }
 

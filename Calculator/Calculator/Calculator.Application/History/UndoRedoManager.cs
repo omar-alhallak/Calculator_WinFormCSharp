@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Calculator.Calculator.Core.History
+namespace Calculator.Calculator.Application.History
 {
     public class UndoRedoManager<T> // Ctrl + Z / Ctrl + Y
     {

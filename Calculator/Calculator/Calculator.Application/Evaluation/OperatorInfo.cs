@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Globalization;
-using Calculator.Calculator.Core.enums;
+using Calculator.Calculator.Domain.enums;
 
-namespace Calculator.Calculator.Core.Evaluation
+namespace Calculator.Calculator.Application.Evaluation
 {
     public static class OperatorInfo // لتنظيم عرض العمليات للمستخدم
     {

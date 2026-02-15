@@ -1,20 +1,20 @@
-﻿using Calculator.Calculator.Core.enums;
-using Calculator.Calculator.Core.Input;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Calculator.Calculator.Core.Model;
+using Calculator.Calculator.Domain.enums;
 
-namespace Calculator.Calculator.Core.Domain
+namespace Calculator.Calculator.Application.Engine
 {
     public static class PercentFeature // عملية %
     {
-        public static void AppendPercent(List<Token> tokens, InputBuffer input)
+        public static void AppendPercent(List<Token> tokens, InputBuffer input) // كيفية إدخال % عند نقر الزر
         {
             if (tokens.Count == 0 && input.IsFresh && input.TryGetValue(out var vFresh) && input.Text != "-")
             {
                 tokens.Add(Token.Num(vFresh));
+
+                if (ExceededPercentLimit(tokens)) return;
+
                 tokens.Add(Token.Percent());
                 input.BeginNew();
                 return;
@@ -27,20 +27,36 @@ namespace Calculator.Calculator.Core.Domain
                 else if (tokens[^1].Type == TokenType.Number)
                     tokens[^1] = Token.Num(v);
 
+                if (ExceededPercentLimit(tokens)) return;
+
                 tokens.Add(Token.Percent());
                 input.BeginNew();
                 return;
             }
 
-            if (tokens.Count > 0 &&
-                (tokens[^1].Type == TokenType.Number ||
-                 tokens[^1].Type == TokenType.Percent))
+            if (tokens.Count > 0 && (tokens[^1].Type == TokenType.Number || tokens[^1].Type == TokenType.Percent))
             {
+                if (ExceededPercentLimit(tokens)) return;
+
                 tokens.Add(Token.Percent());
-            }
+            }          
         }
 
-        public static List<Token> ExpandForEvaluation(IReadOnlyList<Token> raw)
+        private static bool ExceededPercentLimit(List<Token> tokens) // حد إدخال
+        {
+            int chain = 0;
+            int i = tokens.Count - 1;
+
+            while (i >= 0 && tokens[i].Type == TokenType.Percent)
+            {
+                chain++;
+                i--;
+            }
+
+            return chain >= CalcLimits.MaxPercentChain;
+        }
+
+        public static List<Token> ExpandForEvaluation(IReadOnlyList<Token> raw) // تفسير % قبل الحساب
         {
             var eval = new List<Token>();
 
@@ -58,7 +74,6 @@ namespace Calculator.Calculator.Core.Domain
                     continue;
 
                 double value = t.Number;
-
                 int pctCount = 0;
                 int j = i + 1;
 
@@ -73,9 +88,7 @@ namespace Calculator.Calculator.Core.Domain
                     Operator? contextOp = null;
                     double baseValue = 0;
 
-                    if (eval.Count >= 2 &&
-                        eval[^1].Type == TokenType.Operator &&
-                        eval[^2].Type == TokenType.Number)
+                    if (eval.Count >= 2 && eval[^1].Type == TokenType.Operator && eval[^2].Type == TokenType.Number) 
                     {
                         contextOp = eval[^1].Operator;
                         baseValue = eval[^2].Number;
@@ -83,15 +96,10 @@ namespace Calculator.Calculator.Core.Domain
 
                     for (int k = 0; k < pctCount; k++)
                     {
-                        if (contextOp == Operator.Add ||
-                            contextOp == Operator.Subtract)
-                        {
+                        if (contextOp == Operator.Add || contextOp == Operator.Subtract) 
                             value = baseValue * (value / 100.0);
-                        }
                         else
-                        {
                             value = value / 100.0;
-                        }
                     }
 
                     eval.Add(Token.Num(value));

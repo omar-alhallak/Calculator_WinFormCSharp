@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Calculator.Calculator.Core.enums;
+using Calculator.Calculator.Domain.enums;
 
-namespace Calculator.Calculator.Core.Domain
+namespace Calculator.Calculator.Core.Model
 {
     public readonly struct Token // يمثل العملية الحسابية
     {

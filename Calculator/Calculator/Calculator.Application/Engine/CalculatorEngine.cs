@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using Calculator.Calculator.Core.enums;
-using Calculator.Calculator.Core.Evaluation;
-using Calculator.Calculator.Core.History;
-using Calculator.Calculator.Core.Input;
+﻿using System;
+using System.Collections.Generic;
+using Calculator.Calculator.Core.Model;
+using Calculator.Calculator.Domain.enums;
+using Calculator.Calculator.Application.History;
+using Calculator.Calculator.Application.Evaluation;
 
-namespace Calculator.Calculator.Core.Domain
+namespace Calculator.Calculator.Application.Engine
 {
     public class CalculatorEngine // محرك الآلة الحاسبة
     {
         private readonly InputBuffer Input = new();
         private readonly List<Token> Tokens = new();
         private bool AfterEquals = false;
-        private bool AfterPercent = false;
 
         public CalcError PreviewError { get; private set; } = CalcError.None;
         public string TopLine { get; private set; } = "";
@@ -26,35 +25,21 @@ namespace Calculator.Calculator.Core.Domain
             Tokens.Clear();
             Input.Restore("0", true);
             AfterEquals = false;
-            AfterPercent= false;
-
             PreviewError = CalcError.None;
             TopLine = "";
             BottomLine = "0";
         }
 
-        public void ClearEntry()
+        public void ClearEntry() // حذف جزء
         {
-            AfterPercent = false;
-
-            if (!Input.IsFresh)
+            if (!Input.IsFresh || Tokens.Count == 0) 
             {
                 Input.Restore("0", true);
                 UpdatePreview();
                 return;
             }
 
-            if (Tokens.Count == 0)
-            {
-                Input.Restore("0", true);
-                UpdatePreview();
-                return;
-            }
-
-            if (Tokens[^1].Type == TokenType.Operator)
-            {
-                return;
-            }
+            if (Tokens[^1].Type == TokenType.Operator) return;
 
             if (Tokens[^1].Type == TokenType.Percent)
             {
@@ -89,7 +74,7 @@ namespace Calculator.Calculator.Core.Domain
 
         public void InputDigit(char d) // عملية إدخال الأرقام
         {
-            if (AfterPercent) return;
+            if (Tokens.Count > 0 && Tokens[^1].Type == TokenType.Percent) return;
 
             if (AfterEquals)
             {
@@ -104,7 +89,7 @@ namespace Calculator.Calculator.Core.Domain
 
         public void InputDot() // إدخال الفاصلة 
         {
-            if (AfterPercent) return;
+            if (Tokens.Count > 0 && Tokens[^1].Type == TokenType.Percent) return;
 
             if (AfterEquals)
             {
@@ -133,14 +118,9 @@ namespace Calculator.Calculator.Core.Domain
                 return;
             }
 
-            AfterPercent = false;
+            if (!OperatorInfo.FromSymbol.TryGetValue(symbol, out var op))  return;
 
-            if (!OperatorInfo.FromSymbol.TryGetValue(symbol, out var op))
-                return;
-
-            if (Input.IsFresh &&
-                Tokens.Count > 0 &&
-                Tokens[^1].Type == TokenType.Percent)
+            if (Input.IsFresh && Tokens.Count > 0 && Tokens[^1].Type == TokenType.Percent) 
             {
                 if (Tokens.Count >= CalcLimits.MaxTokens - 1)
                 {
@@ -197,8 +177,7 @@ namespace Calculator.Calculator.Core.Domain
 
         public void ApplyPercent() // زر %
         {
-            if (PreviewError != CalcError.None)
-                return;
+            if (PreviewError != CalcError.None) return;
 
             if(AfterEquals)
             {
@@ -206,18 +185,16 @@ namespace Calculator.Calculator.Core.Domain
                 Tokens.Clear();
                 TopLine = "";
             }
+
             PercentFeature.AppendPercent(Tokens, Input);
             UpdatePreview();
-             AfterPercent = true;
         }
 
         public bool Equals(out CalcError error) // زر اليساوي
         {
-            AfterPercent = false;
             error = CalcError.None;
 
-            if (AfterEquals)
-                return true;
+            if (AfterEquals) return true;
 
             if (Tokens.Count == 0 && Input.IsFresh)
             {
@@ -243,7 +220,6 @@ namespace Calculator.Calculator.Core.Domain
             }
 
             string shown = NumberFormatter.Format(result);
-
             TopLine = shown;
             BottomLine = shown;
 
@@ -285,13 +261,11 @@ namespace Calculator.Calculator.Core.Domain
             if (last.Type == TokenType.Number)
             {
                 Tokens.RemoveAt(Tokens.Count - 1);
-
                 Input.Restore(NumberFormatter.ToInputString(last.Number), false);
             }
             else
                 Input.Restore("0", true);
 
-            AfterPercent = Tokens.Count > 0 && Tokens[^1].Type== TokenType.Percent;
             UpdatePreview();
         }
 
@@ -303,11 +277,7 @@ namespace Calculator.Calculator.Core.Domain
             TopLine = BuildTopLine(Tokens);
 
             if (!Input.IsFresh)
-            {
-                TopLine = string.IsNullOrWhiteSpace(TopLine)
-                    ? Input.Text
-                    : TopLine + " " + Input.Text;
-            }
+                TopLine = string.IsNullOrWhiteSpace(TopLine) ? Input.Text : TopLine + " " + Input.Text;
 
             var eval = BuildEvaluationList();
 
@@ -317,6 +287,7 @@ namespace Calculator.Calculator.Core.Domain
                     BottomLine = "0";
                 else
                     BottomLine = Input.Text;
+
                 PreviewError = CalcError.None;
                 return;
             }
@@ -351,20 +322,15 @@ namespace Calculator.Calculator.Core.Domain
             if (tokens.Count == 0) return "";
 
             var parts = new List<string>(tokens.Count);
+
             foreach (var t in tokens)
             {
                 if (t.Type == TokenType.Number)
-                {
                     parts.Add(NumberFormatter.Format(t.Number));
-                }
-                else if (t.Type == TokenType.Operator)
-                {
+                else if (t.Type == TokenType.Operator) 
                     parts.Add(OperatorInfo.ByType[t.Operator].DisplaySymbol);
-                }
                 else if (t.Type == TokenType.Percent)
-                {
                     parts.Add("%");
-                }
             }
 
             return string.Join(" ", parts);
@@ -376,8 +342,7 @@ namespace Calculator.Calculator.Core.Domain
 
         internal CalculatorState Undo() // Ctrl + Z
         {
-            return new CalculatorState(
-                new List<Token>(Tokens),
+            return new CalculatorState(new List<Token>(Tokens),
                 Input.Text,
                 Input.IsFresh,
                 AfterEquals,
