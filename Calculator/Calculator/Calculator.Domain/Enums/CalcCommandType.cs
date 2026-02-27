@@ -16,6 +16,7 @@ namespace Calculator.Calculator.Domain.enums
         Redo,
         Copy,
         Paste,
+        OpenHistory,
         LoadExpression   
     }
 

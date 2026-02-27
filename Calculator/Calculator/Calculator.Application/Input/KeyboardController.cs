@@ -24,6 +24,7 @@ namespace Calculator.Calculator.Application.Input
             // Ctrl shortcuts
             if (ctrl && key == Keys.Back) { cmd = new(CalcCommandType.ClearEntry); return true; }
             if (ctrl && key == Keys.Delete) { cmd = new(CalcCommandType.ClearAll); return true; }
+            if (ctrl && key == Keys.H) { cmd = new(CalcCommandType.OpenHistory); return true; }
 
             // Clear / Backspace
             if (key == Keys.Escape) { cmd = new(CalcCommandType.ClearAll); return true; }
@@ -81,9 +82,9 @@ namespace Calculator.Calculator.Application.Input
             if (key == Keys.Divide) { cmd = new(CalcCommandType.Operator, '/'); return true; }
 
             // Operators (top row)
-            if (key == Keys.Oemplus && shift) { cmd = new(CalcCommandType.Operator, '+'); return true; } // Shift+=
+            if (key == Keys.Oemplus && shift) { cmd = new(CalcCommandType.Operator, '+'); return true; } // Shift + =
             if (key == Keys.OemMinus) { cmd = new(CalcCommandType.Operator, '-'); return true; }         // -
-            if (key == Keys.D8 && shift) { cmd = new(CalcCommandType.Operator, '*'); return true; }      // Shift+8
+            if (key == Keys.D8 && shift) { cmd = new(CalcCommandType.Operator, '*'); return true; }      // Shift + 8
             if (key == Keys.OemQuestion) { cmd = new(CalcCommandType.Operator, '/'); return true; }      // /
 
             return false;
