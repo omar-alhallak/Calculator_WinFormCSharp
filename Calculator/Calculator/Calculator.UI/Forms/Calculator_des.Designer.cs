@@ -1,4 +1,7 @@
-﻿namespace Calculator.Calculator.UI
+﻿using Calculator.Calculator.UI.Tools;
+using Calculator.Calculator.UI.Tools.HistoryView;
+
+namespace Calculator.Calculator.UI.Forms
 {
     partial class Calculator_des : Form
     {
@@ -54,6 +57,7 @@
             btnCE = new RoundedButton();
             btnHistory = new RoundedButton();
             MessageForHistory = new ToolTip(components);
+            historyView = new HistoryView();
             SuspendLayout();
             // 
             // txtStorage
@@ -504,6 +508,16 @@
             MessageForHistory.ReshowDelay = 100;
             MessageForHistory.ToolTipIcon = ToolTipIcon.Info;
             // 
+            // historyView
+            // 
+            historyView.BackColor = Color.Black;
+            historyView.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            historyView.Location = new Point(0, 0);
+            historyView.Margin = new Padding(5);
+            historyView.Name = "historyView";
+            historyView.Size = new Size(364, 355);
+            historyView.TabIndex = 0;
+            // 
             // Calculator_des
             // 
             AutoScaleDimensions = new SizeF(13F, 30F);
@@ -544,7 +558,6 @@
             Padding = new Padding(8);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Calculator";
-            Load += Calculator_des_Load;
             ResumeLayout(false);
             PerformLayout();
 
@@ -576,5 +589,6 @@
         private RoundedButton btnCE;
         private RoundedButton btnHistory;
         private ToolTip MessageForHistory;
+        private HistoryView historyView;
     }
 }

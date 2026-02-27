@@ -4,7 +4,7 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
-namespace Calculator.Calculator.UI
+namespace Calculator.Calculator.UI.Tools
 {
     public class RoundedButton : Button // الزر المدور
     {
@@ -131,6 +131,7 @@ namespace Calculator.Calculator.UI
                     g.FillPath(brush, InPath!);
 
                 int a = 70; 
+
                 if (!Pressed)
                 {
                     using var pen = new Pen(Color.FromArgb(a, ControlPaint.Light(fill, 0.4f)), 1);
@@ -153,7 +154,6 @@ namespace Calculator.Calculator.UI
         // =================
         //    Mouse Event
         // =================
-
         protected override void OnMouseEnter(EventArgs e) 
         {
             base.OnMouseEnter(e);
