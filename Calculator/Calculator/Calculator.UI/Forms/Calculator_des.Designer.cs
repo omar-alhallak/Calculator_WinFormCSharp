@@ -1,5 +1,5 @@
 ﻿using Calculator.Calculator.UI.Tools;
-using Calculator.Calculator.UI.Tools.HistoryView;
+using Calculator.Calculator.UI.Tools.HistoryHelper;
 
 namespace Calculator.Calculator.UI.Forms
 {
@@ -558,6 +558,7 @@ namespace Calculator.Calculator.UI.Forms
             Padding = new Padding(8);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Calculator";
+            Load += Calculator_des_Load;
             ResumeLayout(false);
             PerformLayout();
 

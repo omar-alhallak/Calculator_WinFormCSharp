@@ -3,13 +3,13 @@ using System.Drawing;
 using System.Windows.Forms;
 using Calculator.Calculator.Core.Model;
 using Calculator.Calculator.Application.History;
-using Calculator.Calculator.UI.Tools.HistoryView.HistoryHelper;
+using Calculator.Calculator.UI.Tools.HistoryHelper.HistoryHelper;
 
-namespace Calculator.Calculator.UI.Tools.HistoryView
+namespace Calculator.Calculator.UI.Tools.HistoryHelper
 {
     public partial class HistoryView : UserControl
     {
-        private readonly HistoryListPresenter Presenter;
+        private readonly HistoryListPresenter presenter;
         private readonly HistoryListDrawer Drawer;
 
         public event Action<HistoryEntry>? ItemChosen;
@@ -18,44 +18,33 @@ namespace Calculator.Calculator.UI.Tools.HistoryView
         {
             InitializeComponent();
 
-            Presenter = new HistoryListPresenter(lstHistory);
+            presenter = new HistoryListPresenter(lstHistory, lblMessageEmpty);
             Drawer = new HistoryListDrawer(lstHistory);
-            Drawer.Attach();
-            MassegeEmpty();
+            Drawer.AttachOnce();
 
-            lstHistory.SizeChanged += (_, __) => RefreshNow();
+            lstHistory.SizeChanged += (_, __) => presenter.RequestRefresh();
             lstHistory.DoubleClick += (_, __) => RaiseChosen();
         }
 
-        public void SetHistory(HistoryService history)
+        public void SetHistory(HistoryService history) => presenter.Bind(history);
+
+        public void RefreshNow() => presenter.RequestRefresh();
+
+        public void FocusList() => presenter.FocusFirstIfNothingSelected();
+
+        public void ScrollHorizontal(int dx)
         {
-            Presenter.Bind(history);
-            lblMessageEmpty.Visible = lstHistory.Items.Count == 0;
+            if (presenter.IsRefreshing) return;
+            ListViewScroller.ScrollBy(lstHistory, dx);
         }
 
-        public void RefreshNow()
-        {
-            Presenter.Refresh();
-            MassegeEmpty();
-        }
+        public void DeleteSelected() => presenter.DeleteSelected();
 
-        private void MassegeEmpty()
-        {
-            bool isEmbty = lstHistory.Items.Count == 0;
-            lblMessageEmpty.Visible = isEmbty;
-        }
-
-        public void FocusList() => Presenter.PrepareForKeyboard();
-
-        public void ScrollHorizontal(int dx) => ListViewScroller.ScrollBy(lstHistory, dx);
-
-        public void DeleteSelected() => Presenter.DeleteSelected();
-
-        public void ClearAll() => Presenter.ClearAll();
+        public void ClearAll() => presenter.ClearAll();
 
         private void RaiseChosen()
         {
-            if (Presenter.TryGetSelected(out var entry) && entry != null)
+            if (presenter.TryGetSelected(out var entry) && entry != null)
                 ItemChosen?.Invoke(entry);
         }
 
@@ -67,7 +56,6 @@ namespace Calculator.Calculator.UI.Tools.HistoryView
         }
 
         private void btnDelete_Click(object sender, EventArgs e) => DeleteSelected();
-
         private void btnMC_Click(object sender, EventArgs e) => ClearAll();
     }
 }

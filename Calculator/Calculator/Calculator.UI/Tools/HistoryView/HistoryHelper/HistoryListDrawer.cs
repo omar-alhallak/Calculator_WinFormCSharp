@@ -2,11 +2,12 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Calculator.Calculator.UI.Tools.HistoryView.HistoryHelper
+namespace Calculator.Calculator.UI.Tools.HistoryHelper
 {
-    public sealed class HistoryListDrawer // مسؤول عن رسم العناصر داخل الليست فيو
+    public sealed class HistoryListDrawer // كسؤول عن رسم الفيو داخل الهيستوري
     {
         private readonly ListView List;
+        private bool Attached;
 
         public Color SelectedBackColor { get; set; } = Color.FromArgb(70, 255, 165, 0);
         public Color SelectedTextColor { get; set; } = Color.White;
@@ -19,12 +20,15 @@ namespace Calculator.Calculator.UI.Tools.HistoryView.HistoryHelper
             List = list ?? throw new ArgumentNullException(nameof(list));
         }
 
-        public void Attach()
+        public void AttachOnce()
         {
+            if (Attached) return;
+
             List.OwnerDraw = true;
             List.DrawItem += (_, e) => e.DrawBackground();
             List.DrawSubItem += DrawRow;
             List.DrawColumnHeader += (_, e) => e.DrawBackground();
+            Attached = true;
         }
 
         private void DrawRow(object? sender, DrawListViewSubItemEventArgs e)
@@ -36,7 +40,7 @@ namespace Calculator.Calculator.UI.Tools.HistoryView.HistoryHelper
 
             using (var bg = new SolidBrush(selected ? SelectedBackColor : List.BackColor)) e.Graphics.FillRectangle(bg, e.Bounds);
 
-            string text = e.SubItem?.Text ?? e.Item?.Text ?? "";
+            string text = e.SubItem?.Text ?? e.Item.Text ?? "";
             TextRenderer.DrawText(e.Graphics, text, List.Font, e.Bounds, selected ? SelectedTextColor
                 : List.ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
 

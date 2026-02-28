@@ -103,6 +103,18 @@ namespace Calculator.Calculator.UI
                 return;
             }
 
+            if (Panel.IsDisposed || Host.IsDisposed || Host.Disposing) 
+            {
+                StopInternal(false);
+                return;
+            }
+
+            if(!Host.IsHandleCreated||!Panel.IsHandleCreated)
+            {
+                StopInternal(false);
+                return;
+            }
+
             double t = SW.Elapsed.TotalMilliseconds / Math.Max(1, DurationMs);
             if (t >= 1.0) t = 1.0;
 

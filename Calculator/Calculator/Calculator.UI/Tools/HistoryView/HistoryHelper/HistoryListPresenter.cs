@@ -3,50 +3,99 @@ using System.Windows.Forms;
 using Calculator.Calculator.Core.Model;
 using Calculator.Calculator.Application.History;
 
-namespace Calculator.Calculator.UI.Tools.HistoryView.HistoryHelper
+namespace Calculator.Calculator.UI.Tools.HistoryHelper
 {
-    public sealed class HistoryListPresenter // صلة الوصل بين الهيستوري و الفورم
+    public sealed class HistoryListPresenter // مسؤول ربط بين يوأي والهيستوري سيرفس
     {
         private readonly ListView List;
+        private readonly Label? EmptyLabel;
         private HistoryService? History;
 
-        public HistoryListPresenter(ListView list)
+        private bool RefreshQueued;
+        private bool isRefreshing;
+        public bool IsRefreshing => isRefreshing;
+
+        public HistoryListPresenter(ListView list, Label? emptyLabel = null)
         {
             List = list ?? throw new ArgumentNullException(nameof(list));
+            EmptyLabel = emptyLabel;
+
+            PrepareEmptyLabel();
         }
 
-        public void Bind(HistoryService history)
+        public void Bind(HistoryService history) // "ربط "مصدر البيانات
         {
             History = history ?? throw new ArgumentNullException(nameof(history));
-            Refresh();
+            RequestRefresh();
         }
 
-        public void Refresh()
+        public void RequestRefresh() // تحديث أمن لمنع المشاكل
         {
             if (History == null) return;
+            if (List.IsDisposed || List.Disposing) return;
 
-            List.BeginUpdate();
-            List.Items.Clear();
-
-            foreach (var entry in History.GetLast(5000))
+            if (!List.IsHandleCreated)
             {
-                var text = entry?.ToString();
-                if (string.IsNullOrWhiteSpace(text)) continue;
+                if (RefreshQueued) return;
+                RefreshQueued = true;
 
-                List.Items.Add(new ListViewItem(text) { Tag = entry });
+                void OnHandleCreated(object? s, EventArgs e)
+                {
+                    List.HandleCreated -= OnHandleCreated;
+                    List.BeginInvoke(new Action(RefreshCore));
+                }
+
+                List.HandleCreated += OnHandleCreated;
+                return;
             }
 
-            List.EndUpdate();
-            UpdateColumnWidth();
+            if (RefreshQueued) return;
+            RefreshQueued = true;
+
+            List.BeginInvoke(new Action(RefreshCore));
         }
 
-        public void PrepareForKeyboard()
+        private void RefreshCore() // التحديث الحقيقي
+        {
+            RefreshQueued = false;
+            if (History == null) return;
+            if (List.IsDisposed || List.Disposing) return;
+            if (isRefreshing) return;
+
+            isRefreshing = true;
+
+            List.BeginUpdate();
+            try
+            {
+                List.Items.Clear();
+
+                foreach (var entry in History.GetLast(5000))
+                {
+                    var text = entry?.ToString();
+                    if (string.IsNullOrWhiteSpace(text)) continue;
+                    List.Items.Add(new ListViewItem(text) { Tag = entry });
+                }
+
+                EnsureSingleColumn();
+                UpdateColumnWidth();
+            }
+            finally
+            {
+                List.EndUpdate();
+                isRefreshing = false;
+            }
+
+            UpdateEmptyVisibility();
+        }
+
+        public void FocusFirstIfNothingSelected()
         {
             if (!List.IsHandleCreated) return;
+            if (List.Items.Count == 0) return;
 
             List.Focus();
 
-            if (List.Items.Count > 0 && List.SelectedIndices.Count == 0)
+            if (List.SelectedIndices.Count == 0)
             {
                 List.Items[0].Selected = true;
                 List.Items[0].Focused = true;
@@ -57,22 +106,26 @@ namespace Calculator.Calculator.UI.Tools.HistoryView.HistoryHelper
         public bool DeleteSelected()
         {
             if (History == null) return false;
+            if (isRefreshing) return false;
+
             if (List.SelectedItems.Count == 0) return false;
             if (List.SelectedItems[0].Tag is not HistoryEntry entry) return false;
 
             bool ok = History.Delete(entry.Id);
-            if (ok) Refresh();
+            if (ok) RequestRefresh();
             return ok;
         }
 
         public void ClearAll()
         {
             if (History == null) return;
+            if (isRefreshing) return;
+
             History.ClearAll();
-            Refresh();
+            RequestRefresh();
         }
 
-        public bool TryGetSelected(out HistoryEntry? entry)
+        public bool TryGetSelected(out HistoryEntry? entry) // جلب العنصر
         {
             entry = null;
             if (List.SelectedItems.Count == 0) return false;
@@ -80,6 +133,47 @@ namespace Calculator.Calculator.UI.Tools.HistoryView.HistoryHelper
 
             entry = e;
             return true;
+        }
+
+// ---------------------------------------
+//              Empty label 
+// ---------------------------------------
+
+        private void PrepareEmptyLabel()
+        {
+            if (EmptyLabel == null) return;
+
+            EmptyLabel.BringToFront();
+
+            EmptyLabel.Visible = false;
+
+            List.SizeChanged += (_, __) =>
+            {
+                if (EmptyLabel == null) return;
+                EmptyLabel.Bounds = List.Bounds;
+                EmptyLabel.BringToFront();
+            };
+        }
+
+        private void UpdateEmptyVisibility()
+        {
+            if (EmptyLabel == null) return;
+
+            bool isEmpty = List.Items.Count == 0;
+
+            EmptyLabel.Bounds = List.Bounds;
+            EmptyLabel.Visible = isEmpty;
+            EmptyLabel.BringToFront();
+        }
+
+ // --------------------------------------
+//              ListView column
+// ---------------------------------------
+
+        private void EnsureSingleColumn()
+        {
+            if (List.Columns.Count == 0)
+                List.Columns.Add("", Math.Max(10, List.ClientSize.Width - 2));
         }
 
         private void UpdateColumnWidth()

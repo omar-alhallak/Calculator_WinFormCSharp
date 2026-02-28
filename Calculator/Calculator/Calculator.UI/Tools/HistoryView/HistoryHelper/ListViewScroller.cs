@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
-namespace Calculator.Calculator.UI.Tools.HistoryView.HistoryHelper
+namespace Calculator.Calculator.UI.Tools.HistoryHelper.HistoryHelper
 {
     public static class ListViewScroller // تفعيل الأسهم الجانبية
     {

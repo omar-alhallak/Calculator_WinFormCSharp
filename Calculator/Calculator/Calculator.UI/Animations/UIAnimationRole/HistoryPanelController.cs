@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using Calculator.Calculator.UI.Tools.HistoryView;
+using Calculator.Calculator.UI.Tools.HistoryHelper;
 
 namespace Calculator.Calculator.UI.Animations.TooleAnimations
 {

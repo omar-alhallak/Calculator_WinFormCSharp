@@ -1,4 +1,4 @@
-﻿namespace Calculator.Calculator.UI.Tools.HistoryView
+﻿namespace Calculator.Calculator.UI.Tools.HistoryHelper
 {
     partial class HistoryView
     {
@@ -33,7 +33,7 @@
             btnDelete = new RoundedButton();
             btnMC = new RoundedButton();
             lblMessageEmpty = new Label();
-            label1 = new Label();
+            lblName = new Label();
             SuspendLayout();
             // 
             // lstHistory
@@ -101,30 +101,30 @@
             lblMessageEmpty.BackColor = Color.FromArgb(20, 20, 20);
             lblMessageEmpty.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblMessageEmpty.ForeColor = Color.White;
-            lblMessageEmpty.Location = new Point(28, 82);
+            lblMessageEmpty.Location = new Point(95, 86);
             lblMessageEmpty.Name = "lblMessageEmpty";
-            lblMessageEmpty.Size = new Size(312, 38);
+            lblMessageEmpty.Size = new Size(183, 38);
             lblMessageEmpty.TabIndex = 1000;
-            lblMessageEmpty.Text = "\"ابدأ بالحساب لتظهر العمليات هنا\"";
-            lblMessageEmpty.Visible = false;
+            lblMessageEmpty.Text = "\"لا يوجد محفوظات\"";
+            lblMessageEmpty.TextAlign = ContentAlignment.TopCenter;
             // 
-            // label1
+            // lblName
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(6, 5);
-            label1.Name = "label1";
-            label1.Size = new Size(139, 50);
-            label1.TabIndex = 1001;
-            label1.Text = "History";
+            lblName.AutoSize = true;
+            lblName.Font = new Font("Segoe UI", 27.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblName.ForeColor = Color.Red;
+            lblName.Location = new Point(6, 5);
+            lblName.Name = "lblName";
+            lblName.Size = new Size(139, 50);
+            lblName.TabIndex = 1001;
+            lblName.Text = "History";
             // 
             // HistoryView
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            Controls.Add(label1);
+            Controls.Add(lblName);
             Controls.Add(lblMessageEmpty);
             Controls.Add(lstHistory);
             Controls.Add(btnDelete);
@@ -145,6 +145,6 @@
         private RoundedButton btnDelete;
         private RoundedButton btnMC;
         private Label lblMessageEmpty;
-        private Label label1;
+        private Label lblName;
     }
 }
